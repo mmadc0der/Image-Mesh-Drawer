@@ -27,7 +27,7 @@ h1 {
 .input-group {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin: 10px 0; /* Add margin for spacing */
 }
 
@@ -42,8 +42,10 @@ h1 {
 }
 
 .input-group input[type="color"],
-.input-group input[type="number"] {
-    margin-right: 10px;
+.input-group input[type="number"],
+.input-group select,
+.input-group button {
+    margin: 5px;
 }
 
 input[type="file"],
@@ -58,8 +60,17 @@ button {
 }
 
 input[type="color"],
-input[type="number"] {
+input[type="number"],
+select {
+    padding: 5px;
+    border: 2px solid #161616;
+    border-radius: 5px;
+    cursor: pointer;
     width: 40%;
+}
+
+select {
+    width: 20%;
 }
 
 canvas {

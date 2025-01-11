@@ -24,7 +24,17 @@
             <input type="number" id="lineWeight" value="1" min="1" max="10">
         </div>
         
-        <button id="drawMeshButton">Draw Mesh</button>
+        <div class="input-group">    
+            <label for="meshType">Mesh Type:</label>
+            <select id="meshType">
+                <option value="3x3">3x3</option>
+                <option value="diagonal">Diagonal</option>
+                <option value="golden-ratio">Golden Ratio</option>
+                <option value="fibonacci">Fibonacci</option>
+            </select>
+            
+            <button id="drawMeshButton">Draw Mesh</button>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>

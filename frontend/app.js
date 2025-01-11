@@ -105,8 +105,9 @@ document.getElementById('loadClipboardButton').addEventListener('click', async f
 document.getElementById('drawMeshButton').addEventListener('click', function() {
     const canvas = document.getElementById('imageCanvas');
     const ctx = canvas.getContext('2d');
-    const rows = 3;
-    const cols = 3;
+
+    // Get the selected mesh type
+    const meshType = document.getElementById('meshType').value;
 
     // Get the line color and weight from the inputs
     const lineColor = document.getElementById('lineColor').value;
@@ -122,22 +123,87 @@ document.getElementById('drawMeshButton').addEventListener('click', function() {
     meshCtx.strokeStyle = lineColor;
     meshCtx.lineWidth = lineWeight;
 
-    const cellWidth = meshCanvas.width / cols;
-    const cellHeight = meshCanvas.height / rows;
+    const cellWidth = meshCanvas.width / 3; // Default for 3x3
+    const cellHeight = meshCanvas.height / 3; // Default for 3x3
 
-    // Draw the mesh on the new canvas
-    for (let i = 1; i < cols; i++) {
-        meshCtx.beginPath();
-        meshCtx.moveTo(i * cellWidth, 0);
-        meshCtx.lineTo(i * cellWidth, meshCanvas.height);
-        meshCtx.stroke();
-    }
+    // Draw the selected mesh type
+    switch (meshType) {
+        case '3x3':
+            for (let i = 1; i < 3; i++) {
+                meshCtx.beginPath();
+                meshCtx.moveTo(i * cellWidth, 0);
+                meshCtx.lineTo(i * cellWidth, meshCanvas.height);
+                meshCtx.stroke();
+            }
+            for (let j = 1; j < 3; j++) {
+                meshCtx.beginPath();
+                meshCtx.moveTo(0, j * cellHeight);
+                meshCtx.lineTo(meshCanvas.width, j * cellHeight);
+                meshCtx.stroke();
+            }
+            break;
 
-    for (let j = 1; j < rows; j++) {
-        meshCtx.beginPath();
-        meshCtx.moveTo(0, j * cellHeight);
-        meshCtx.lineTo(meshCanvas.width, j * cellHeight);
-        meshCtx.stroke();
+        case 'diagonal':
+            meshCtx.beginPath();
+            meshCtx.moveTo(0, 0);
+            meshCtx.lineTo(meshCanvas.width, meshCanvas.height);
+            meshCtx.stroke();
+            meshCtx.beginPath();
+            meshCtx.moveTo(meshCanvas.width, 0);
+            meshCtx.lineTo(0, meshCanvas.height);
+            meshCtx.stroke();
+            break;
+
+        case 'golden-ratio':
+            const phi = (1 + Math.sqrt(5)) / 2; // Golden ratio
+            const goldenCellWidth = meshCanvas.width / phi;
+            const goldenCellHeight = meshCanvas.height / phi;
+            for (let i = 1; i < 3; i++) {
+                meshCtx.beginPath();
+                meshCtx.moveTo(i * goldenCellWidth, 0);
+                meshCtx.lineTo(i * goldenCellWidth, meshCanvas.height);
+                meshCtx.stroke();
+            }
+            for (let j = 1; j < 3; j++) {
+                meshCtx.beginPath();
+                meshCtx.moveTo(0, j * goldenCellHeight);
+                meshCtx.lineTo(meshCanvas.width, j * goldenCellHeight);
+                meshCtx.stroke();
+            }
+            break;
+
+        case 'fibonacci':
+            const fib = [0, 1];
+            for (let i = 2; i < 10; i++) {
+                fib[i] = fib[i - 1] + fib[i - 2];
+            }
+
+            let x = 0;
+            let y = 0;
+
+            for (let i = 1; i < fib.length; i++) {
+                const width = fib[i] * 10;
+                const height = fib[i - 1] * 10;
+
+                meshCtx.strokeRect(x, y, width, height);
+
+                x += width;
+                y += height;
+            }
+
+            for (let i = 0; i <= meshCanvas.width; i += 10) {
+                meshCtx.beginPath();
+                meshCtx.moveTo(i, 0);
+                meshCtx.lineTo(i, meshCanvas.height);
+                meshCtx.stroke();
+            }
+
+            for (let j = 0; j <= meshCanvas.height; j += 10) {
+                meshCtx.beginPath();
+                meshCtx.moveTo(0, j);
+                meshCtx.lineTo(meshCanvas.width, j);
+                meshCtx.stroke();
+            }
     }
 
     // Convert the canvas to a PNG and prompt for download
