@@ -107,23 +107,45 @@ document.getElementById('drawMeshButton').addEventListener('click', function() {
     const ctx = canvas.getContext('2d');
     const rows = 3;
     const cols = 3;
-    const cellWidth = canvas.width / cols;
-    const cellHeight = canvas.height / rows;
 
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
+    // Get the line color and weight from the inputs
+    const lineColor = document.getElementById('lineColor').value;
+    const lineWeight = document.getElementById('lineWeight').value;
 
+    // Create a new canvas for the transparent PNG
+    const meshCanvas = document.createElement('canvas');
+    meshCanvas.width = canvas.width;
+    meshCanvas.height = canvas.height;
+    const meshCtx = meshCanvas.getContext('2d');
+
+    // Set the stroke style and line width
+    meshCtx.strokeStyle = lineColor;
+    meshCtx.lineWidth = lineWeight;
+
+    const cellWidth = meshCanvas.width / cols;
+    const cellHeight = meshCanvas.height / rows;
+
+    // Draw the mesh on the new canvas
     for (let i = 1; i < cols; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * cellWidth, 0);
-        ctx.lineTo(i * cellWidth, canvas.height);
-        ctx.stroke();
+        meshCtx.beginPath();
+        meshCtx.moveTo(i * cellWidth, 0);
+        meshCtx.lineTo(i * cellWidth, meshCanvas.height);
+        meshCtx.stroke();
     }
 
     for (let j = 1; j < rows; j++) {
-        ctx.beginPath();
-        ctx.moveTo(0, j * cellHeight);
-        ctx.lineTo(canvas.width, j * cellHeight);
-        ctx.stroke();
+        meshCtx.beginPath();
+        meshCtx.moveTo(0, j * cellHeight);
+        meshCtx.lineTo(meshCanvas.width, j * cellHeight);
+        meshCtx.stroke();
     }
+
+    // Convert the canvas to a PNG and prompt for download
+    const pngUrl = meshCanvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = pngUrl;
+    link.download = 'mesh.png'; // Default filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 });

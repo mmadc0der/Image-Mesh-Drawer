@@ -10,10 +10,21 @@
 <body>
     <div class="container">
         <h1>Image Mesh Drawer</h1>
-        <input type="file" id="imageUpload" accept="image/*">
-        <button id="loadClipboardButton">Load from Clipboard</button>
+        <div class="input-group">
+            <input type="file" id="imageUpload" accept="image/*">
+            <button id="loadClipboardButton">Load from Clipboard</button>
+        </div>
         <canvas id="imageCanvas"></canvas>
-        <button id="drawMeshButton">Draw 3x3 Mesh</button>
+        
+        <div class="input-group">
+            <label for="lineColor">Line Color:</label>
+            <input type="color" id="lineColor" value="#161616">
+            
+            <label for="lineWeight">Line Weight:</label>
+            <input type="number" id="lineWeight" value="1" min="1" max="10">
+        </div>
+        
+        <button id="drawMeshButton">Draw Mesh</button>
     </div>
     <script src="app.js"></script>
 </body>
