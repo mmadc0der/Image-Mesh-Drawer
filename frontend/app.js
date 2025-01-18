@@ -206,12 +206,24 @@ document.getElementById('drawMeshButton').addEventListener('click', function() {
             }
     }
 
-    // Convert the canvas to a PNG and prompt for download
-    const pngUrl = meshCanvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = pngUrl;
-    link.download = 'mesh.png'; // Default filename
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Draw the mesh on the main canvas
+    ctx.drawImage(meshCanvas, 0, 0);
+
+    // Add download button if it doesn't exist
+    let downloadButton = document.getElementById('downloadMeshButton');
+    if (!downloadButton) {
+        downloadButton = document.createElement('button');
+        downloadButton.id = 'downloadMeshButton';
+        downloadButton.textContent = 'Download Mesh';
+        downloadButton.onclick = function() {
+            const pngUrl = meshCanvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = pngUrl;
+            link.download = 'mesh.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        document.getElementById('drawMeshButton').parentNode.insertBefore(downloadButton, document.getElementById('drawMeshButton').nextSibling);
+    }
 });
