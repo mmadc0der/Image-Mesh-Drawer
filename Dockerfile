@@ -1,5 +1,8 @@
-FROM nginx:alpine
-#FROM i386/nginx:alpine
+# Normal build
+FROM nginx:1.27-alpine
+
+# Build for specific (i386) architecture 
+# FROM i386/nginx:alpine
 
 COPY ./frontend /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
