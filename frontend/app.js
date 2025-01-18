@@ -299,61 +299,44 @@ document.getElementById('drawMeshButton').addEventListener('click', function() {
             break;
 
         case 'fibonacci':
-            // Правильная спираль Фибоначчи
-            const fib = [0, 1];
-            for (let i = 2; i < 10; i++) {
-                fib[i] = fib[i - 1] + fib[i - 2];
+            // Создаем последовательность Фибоначчи
+            const fib = [1];  // Начинаем с 1, чтобы избежать нулевого расстояния
+            for (let i = 1; i < 8; i++) {  // Ограничиваем количество линий для лучшей видимости
+                fib[i] = (i === 1) ? 1 : fib[i - 1] + fib[i - 2];
             }
             
-            // Находим максимальный размер спирали
-            const maxFib = fib[fib.length - 1];
-            const scale = Math.min(meshCanvas.width, meshCanvas.height) / (maxFib * 1.5);
+            // Находим сумму всех чисел для нормализации
+            const sumFib = fib.reduce((a, b) => a + b, 0);
             
-            // Центрируем спираль
-            let centerX = meshCanvas.width / 2;
-            let centerY = meshCanvas.height / 2;
-            
-            meshCtx.beginPath();
-            let currentX = centerX;
-            let currentY = centerY;
-            
-            // Рисуем спираль
-            for (let i = 2; i < fib.length; i++) {
-                const size = fib[i] * scale;
-                const prevSize = fib[i - 1] * scale;
+            // Рисуем горизонтальные линии
+            let currentY = 0;
+            for (let i = 0; i < fib.length; i++) {
+                // Вычисляем расстояние пропорционально числу Фибоначчи
+                const distance = (fib[i] / sumFib) * meshCanvas.height;
+                currentY += distance;
                 
-                switch ((i - 2) % 4) {
-                    case 0: // вправо и вниз
-                        meshCtx.moveTo(currentX, currentY);
-                        meshCtx.lineTo(currentX + size, currentY);
-                        meshCtx.lineTo(currentX + size, currentY + prevSize);
-                        currentX += size;
-                        currentY += prevSize;
-                        break;
-                    case 1: // влево и вниз
-                        meshCtx.moveTo(currentX, currentY);
-                        meshCtx.lineTo(currentX, currentY + size);
-                        meshCtx.lineTo(currentX - prevSize, currentY + size);
-                        currentX -= prevSize;
-                        currentY += size;
-                        break;
-                    case 2: // влево и вверх
-                        meshCtx.moveTo(currentX, currentY);
-                        meshCtx.lineTo(currentX - size, currentY);
-                        meshCtx.lineTo(currentX - size, currentY - prevSize);
-                        currentX -= size;
-                        currentY -= prevSize;
-                        break;
-                    case 3: // вправо и вверх
-                        meshCtx.moveTo(currentX, currentY);
-                        meshCtx.lineTo(currentX, currentY - size);
-                        meshCtx.lineTo(currentX + prevSize, currentY - size);
-                        currentX += prevSize;
-                        currentY -= size;
-                        break;
+                if (currentY < meshCanvas.height) {  // Проверяем, чтобы не выйти за пределы холста
+                    meshCtx.beginPath();
+                    meshCtx.moveTo(0, currentY);
+                    meshCtx.lineTo(meshCanvas.width, currentY);
+                    meshCtx.stroke();
                 }
             }
-            meshCtx.stroke();
+            
+            // Рисуем вертикальные линии
+            let currentX = 0;
+            for (let i = 0; i < fib.length; i++) {
+                // Вычисляем расстояние пропорционально числу Фибоначчи
+                const distance = (fib[i] / sumFib) * meshCanvas.width;
+                currentX += distance;
+                
+                if (currentX < meshCanvas.width) {  // Проверяем, чтобы не выйти за пределы холста
+                    meshCtx.beginPath();
+                    meshCtx.moveTo(currentX, 0);
+                    meshCtx.lineTo(currentX, meshCanvas.height);
+                    meshCtx.stroke();
+                }
+            }
             break;
     }
 
