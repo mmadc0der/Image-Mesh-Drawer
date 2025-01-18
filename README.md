@@ -20,8 +20,8 @@ Before build check Dockerfile and change nginx architecture if necessary. Also c
 
 ```bash
 docker build -t image-mesh-drawer-frontend .
-docker tag image-mesh-drawer-frontend madc0der/image-mesh-drawer-frontend:1.2
-docker push madc0der/image-mesh-drawer-frontend:1.2
+docker tag image-mesh-drawer-frontend madc0der/image-mesh-drawer-frontend:x64
+docker push madc0der/image-mesh-drawer-frontend:x64
 ```
 
 ## Startup
